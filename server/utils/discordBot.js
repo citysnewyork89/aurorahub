@@ -11,7 +11,8 @@ async function sendPurchaseDM(order) {
     if (!user) return;
 
     const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-    const settings = await require('../models/Settings').find();
+    const Settings = require('./models/Settings');
+    const settings = await Settings.find();
     const settingsObj = {};
     settings.forEach(s => settingsObj[s.key] = s.value);
 
@@ -44,7 +45,7 @@ async function sendPurchaseDM(order) {
         .setDescription('> Download your purchased product by clicking the button below.');
 
       // Generate download token
-      const DownloadToken = require('../models/DownloadToken');
+      const DownloadToken = require('./models/DownloadToken');
       const { v4: uuidv4 } = require('uuid');
       const tokenDoc = await DownloadToken.create({
         token: uuidv4(),

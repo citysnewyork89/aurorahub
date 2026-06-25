@@ -24,7 +24,14 @@ app.use(limiter);
 
 // CORS
 app.use(cors({
-  origin: process.env.CLIENT_URL,
+  origin: function(origin, callback) {
+    const clientUrl = process.env.CLIENT_URL.replace(/\/$/, ''); // quita la / del final
+    if (!origin || origin.replace(/\/$/, '') === clientUrl) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 
